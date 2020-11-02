@@ -1,112 +1,98 @@
 const db = require("../models");
-const Post = db.post;
+const Comment = db.comment;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Post
+// Create and Save a new Comment
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.text_content) {
+    if (!req.body.comment_content) {
       res.status(400).send({
         message: "Content can not be empty!"
       });
       return;
     }
   
-    // Create a Post
-    const post = {
+    // Get comment content back
+    const comment = {
       user_id: req.params.user_id,
-      text_content: req.body.text_content
+      post_id: req.params.post_id,
+      comment_content: req.body.comment_content
     };
   
-    // Save Post in the database
-    Post.create(post)
+    // Save Comment in the database
+    Comment.create(comment)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the Post."
+            err.message || "Some error occurred while creating the Comment."
         });
       });
   };
 
 
-// Find a single Post with an id
-exports.findOne = (req, res) => {
-    const id = req.params.id;
-  
-    Post.findByPk(id)
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error retrieving Post with id=" + id
-        });
-      });
-  };
-
-// Update a Post by the id in the request
+// Update a Comment by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
   
-    Post.update(req.body, {
+    Comment.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Post was updated successfully."
+            message: "Comment was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Post with id=${id}. Maybe Post was not found or req.body is empty!`
+            message: `Cannot update Comment with id=${id}. Maybe Comment was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Post with id=" + id
+          message: "Error updating Comment with id=" + id
         });
       });
   };
 
-// Delete a Post with the specified id in the request
+// Delete a Comment with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
   
-    Post.destroy({
+    Comment.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Post was deleted successfully!"
+            message: "Comment was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Post with id=${id}. Maybe Post was not found!`
+            message: `Cannot delete Comment with id=${id}. Maybe Comment was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Post with id=" + id
+          message: "Could not delete Comment with id=" + id
         });
       });
   };
 
-// Find all published Posts
+// Find all published Comment
 exports.findAllPublished = (req, res) => {
-    Post.findAll()
+    Comment.findAll()
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving Post."
+            err.message || "Some error occurred while retrieving Comment."
         });
       });
   };

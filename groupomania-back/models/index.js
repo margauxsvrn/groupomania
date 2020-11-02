@@ -1,17 +1,12 @@
-const dbConfig = require("../config/db.config.js");
+// J'APPEL MON FICHIER .ENV QUI CONTIENT LES ID DE CONNEXION A LA BDD
+require('dotenv').config()
 
+// JE CONNECTE MA BDD
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-  host: dbConfig.HOST,
-  dialect: dbConfig.dialect,
+const sequelize = new Sequelize(process.env.DB, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.HOST,
+  dialect: process.env.DB_DIALECT,
   operatorsAliases: false,
-
-  pool: {
-    max: dbConfig.pool.max,
-    min: dbConfig.pool.min,
-    acquire: dbConfig.pool.acquire,
-    idle: dbConfig.pool.idle
-  }
 });
 
 const db = {};
@@ -19,6 +14,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
+db.post = require("./post.model.js")(sequelize, Sequelize);
+// db.user = require("./user.model.js")(sequelize, Sequelize);
+db.comment = require("./comment.model.js")(sequelize, Sequelize);
 
 module.exports = db;
