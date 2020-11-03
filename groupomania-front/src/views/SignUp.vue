@@ -3,7 +3,6 @@
     <Header />
     <h3 class="signup-title">Créer un compte</h3>
     <br>
-    <br>
     <form class="login-form">
       <div class="form-group">
         <label for="exampleInputName1">Nom</label>
@@ -37,6 +36,9 @@
           class="form-control"
           id="exampleInputPassword1"
         />
+        <small id="emailHelp" class="form-text text-muted">
+            Doit contenir entre 4 à 8 caractères avec minimum un chiffre
+        </small>
       </div>
       <button type="submit"><router-link class="btn btn-primary" to="/home">S'inscrire</router-link></button>
     </form>
