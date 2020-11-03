@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // J'ENREGISTRE LE ROUTEUR POUR TOUTES LES DEMANDES FAITES VERS LES L'API
 
 require("./routes/post.routes")(app);
-// require("./routes/user.routes")(app);
+require("./routes/user.routes")(app);
 require("./routes/comment.routes")(app);
 
 // MISE EN PLACE DU PORT ET D'UN ÉCOUTEUR D'ÉVÈNEMENT
