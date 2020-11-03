@@ -7,7 +7,7 @@ module.exports = app => {
     router.post("/", comment.create);
   
     // Retrieve all published comments
-    router.get("/published", comment.findAllPublished);
+    router.get("/:postId", comment.findAllPublished);
   
     // Update a comment with id
     router.put("/:id", comment.update);

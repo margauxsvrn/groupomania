@@ -20,9 +20,12 @@ module.exports = (sequelize, Sequelize) => {
       },
       isAdmin: {
         type: Sequelize.BOOLEAN
-      },
+      }
+    },
+
+    {
       updatedAt: false
     });
-  
+    
     return User;
   };

@@ -14,8 +14,8 @@ exports.create = (req, res) => {
   
     // Get comment content back
     const comment = {
-      user_id: req.params.user_id,
-      post_id: req.params.post_id,
+      user_id: req.params.userId,
+      post_id: req.params.postId,
       comment_content: req.body.comment_content
     };
   

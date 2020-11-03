@@ -14,7 +14,7 @@ exports.create = (req, res) => {
   
     // Create a Post
     const post = {
-      user_id: req.params.user_id,
+      user_id: req.params.userId,
       text_content: req.body.text_content
     };
   
