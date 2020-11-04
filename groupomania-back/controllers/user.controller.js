@@ -15,6 +15,10 @@ exports.signup = (req, res) => {
     
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
+            // là, tu es en train de réassigner une nouvelle valeur à ton user
+            // ce que tu veux peut-être c'est juste modifier sa propriété password !
+            // par exemple : user.password = hash;
+            // on ne modifie QUE la propriété password. 
             user = {
                 password: hash
             };
