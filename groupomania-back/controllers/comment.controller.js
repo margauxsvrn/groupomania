@@ -24,12 +24,7 @@ exports.create = (req, res) => {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the Comment."
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };
 
 
@@ -51,11 +46,7 @@ exports.update = (req, res) => {
           });
         }
       })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error updating Comment with id=" + id
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };
 
 // Delete a Comment with the specified id in the request
@@ -76,11 +67,7 @@ exports.delete = (req, res) => {
           });
         }
       })
-      .catch(err => {
-        res.status(500).send({
-          message: "Could not delete Comment with id=" + id
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };
 
 // Find all published Comment
@@ -89,10 +76,5 @@ exports.findAllPublished = (req, res) => {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving Comment."
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };

@@ -6,24 +6,26 @@ const jwt = require('jsonwebtoken');
 
 // Create and Save a new User
 exports.signup = (req, res) => {
-    const user = {
-        email: req.body.email,
-        password: req.body.password,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname
-    };
-    
-    bcrypt.hash(req.body.password, 10)
-        .then(hash => {
-            user = {
-                password: hash
-            };
-        });
-        User.create(user)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(error => res.status(500).json({ error }));
+    bcrypt.hash(req.body.password, 10, (err, pass) => {
+        let newUser = User.create({
+                email: req.body.email,
+                password: pass,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                isAdmin: false
+            })
+            .then(newUser => {
+                return res.status(201).json({
+                    message: 'User created !',
+                    userId: newUser.id
+                })
+            })
+            .catch(err => {
+                return res.status(500).json({
+                    'error': `${err}`
+                })
+            })
+    })
       
 };
 
@@ -31,12 +33,12 @@ exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+                return res.status(401).json({ error: 'User not found !' });
             }
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                        return res.status(401).json({ error: 'Incorrect password !' });
                     }
                     res.status(200).json({
                         userId: user.id,

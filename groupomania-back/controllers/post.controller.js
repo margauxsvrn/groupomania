@@ -23,12 +23,7 @@ exports.create = (req, res) => {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the Post."
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };
 
 
@@ -40,11 +35,7 @@ exports.findOne = (req, res) => {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error retrieving Post with id=" + id
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };
 
 // Update a Post by the id in the request
@@ -65,11 +56,8 @@ exports.update = (req, res) => {
           });
         }
       })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error updating Post with id=" + id
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
+
   };
 
 // Delete a Post with the specified id in the request
@@ -90,11 +78,7 @@ exports.delete = (req, res) => {
           });
         }
       })
-      .catch(err => {
-        res.status(500).send({
-          message: "Could not delete Post with id=" + id
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };
 
 // Find all published Posts
@@ -103,10 +87,5 @@ exports.findAllPublished = (req, res) => {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving Post."
-        });
-      });
+      .catch(error => res.status(500).json({ error }));
   };

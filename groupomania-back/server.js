@@ -6,9 +6,7 @@ const app = express();
 const db = require("./models");
 
 // JE SYNCHRONISE MA BDD
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
-  });
+db.sequelize.sync();
 
 var corsOptions = {
   origin: "http://localhost:8081"
