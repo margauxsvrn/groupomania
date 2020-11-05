@@ -36,9 +36,7 @@
           class="form-control"
           id="exampleInputPassword1"
         />
-        <small id="emailHelp" class="form-text text-muted">
-            Doit contenir entre 4 à 8 caractères avec minimum un chiffre
-        </small>
+        
       </div>
       <button type="submit"><router-link class="btn btn-primary" to="/home">S'inscrire</router-link></button>
     </form>
