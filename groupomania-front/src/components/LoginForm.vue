@@ -1,9 +1,10 @@
 <template>
   <div>
-    <form class="login-form">
+    <form class="login-form" @submit="login">
       <div class="form-group">
         <label for="exampleInputEmail1">Adresse email</label>
         <input
+          v-model="email"
           type="email"
           class="form-control"
           id="exampleInputEmail1"
@@ -13,6 +14,7 @@
       <div class="form-group">
         <label for="exampleInputPassword1">Mot de passe</label>
         <input
+          v-model="password"
           type="password"
           class="form-control"
           id="exampleInputPassword1"
@@ -23,8 +25,8 @@
           </router-link></small
         >
       </div>
-      <button type="submit">
-        <router-link class="btn btn-primary" to="/home">Valider</router-link>
+      <button type="submit" class="btn btn-primary">
+      Valider
       </button>
     </form>
   </div>
@@ -33,7 +35,51 @@
 <script>
 export default {
   name: "LoginForm",
+
+  data: function(){
+    return {
+      email: "",
+      password: ""
+    }
+  },
+
+  methods: {
+    login: function(e){
+      e.preventDefault();
+
+      if( this.email && this.password ){
+        const sentForm = async function (data) {
+          let response = await fetch('http://localhost:8080/api/user/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          })
+          let responseData = response.json()
+          return responseData;
+        }
+        
+
+        sentForm({
+          email: this.email,
+          password: this.password
+        })
+        .then(this.$router.push({ path: "/home" }))
+        
+        // return this.$router.push({ path: "/home" })
+      }
+      else{
+        window.alert("Tous les champs sont obligatoires !")
+      }
+      
+
+    } 
+
+  } 
 };
+
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -48,11 +94,6 @@ ul {
 li {
   display: inline-block;
   margin: 0 10px;
-}
-
-button {
-  border: none;
-  background-color: white;
 }
 
 .login-form {

@@ -43,8 +43,8 @@ exports.login = (req, res, next) => {
                     if (!valid) {
                         return res.status(401).json({ error: 'Incorrect password !' });
                     }
-                    res.status(200).json({
-                        userId: user.id,
+                    return res.status(200).json({
+                        user:  user,
                         token: jwt.sign(
                             { userId: user._id },
                             'RANDOM_TOKEN_SECRET',

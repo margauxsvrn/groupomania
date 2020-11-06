@@ -1,18 +1,27 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const helmet = require('helmet'); // Installation de Helmet qui configure de manière appropriée des en-têtes HTTP liés à la sécurité
 
 const app = express();
 const db = require("./models");
 
+
+// UTILISATION DE HELMET
+app.use(helmet());
+
+
 // JE SYNCHRONISE MA BDD
 db.sequelize.sync();
 
+
+// UTILISATION DE CORS
 var corsOptions = {
   origin: "http://localhost:8081"
 };
 
 app.use(cors(corsOptions));
+
 
 // FONCTION JSON
 app.use(bodyParser.json());

@@ -3,10 +3,11 @@
     <Header />
     <h3 class="signup-title">Créer un compte</h3>
     <br>
-    <form class="login-form">
+    <form class="login-form" @submit="signup">
       <div class="form-group">
         <label for="exampleInputName1">Nom</label>
         <input
+          v-model="lastname"
           type="text"
           class="form-control"
           id="exampleInputName1"
@@ -15,6 +16,7 @@
       <div class="form-group">
         <label for="exampleInputName1">Prénom</label>
         <input
+          v-model="firstname"
           type="text"
           class="form-control"
           id="exampleInputName1"
@@ -23,6 +25,7 @@
       <div class="form-group">
         <label for="exampleInputEmail1">Adresse email</label>
         <input
+          v-model="email"
           type="email"
           class="form-control"
           id="exampleInputEmail1"
@@ -32,13 +35,14 @@
       <div class="form-group">
         <label for="exampleInputPassword1">Mot de passe</label>
         <input
+          v-model="password"
           type="password"
           class="form-control"
           id="exampleInputPassword1"
         />
         
       </div>
-      <button type="submit"><router-link class="btn btn-primary" to="/home">S'inscrire</router-link></button>
+      <button type="submit" class="btn btn-primary">S'inscrire</button>
     </form>
   </div>
 </template>
@@ -51,7 +55,49 @@ export default {
   name: "Signup",
   components: {
     Header
-  } 
+  },
+
+  data: function(){
+    return {
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: ""
+    }
+  },
+
+  methods: {
+    signup: function(e){
+      e.preventDefault();
+
+      if( this.email && this.password && this.firstname && this.lastname ){
+        const sentForm = async function (data) {
+          let response = await fetch('http://localhost:8080/api/user/signup', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          })
+          let responseData = response.json()
+          return responseData;
+        }
+
+        sentForm({
+          firstname: this.firstname,
+          lastname: this.lastname,
+          email: this.email,
+          password: this.password
+        })
+        return this.$router.push({ path: "/home" })
+      }
+      else{
+        window.alert("Tous les champs sont obligatoires !")
+      }
+
+    }
+
+  }  
 };
 </script>
 
@@ -69,10 +115,7 @@ li {
   margin: 0 10px;
 }
 
-button {
-  border: none;
-  background-color: white;
-}
+
 
 .login-form {
   width: 100%;
