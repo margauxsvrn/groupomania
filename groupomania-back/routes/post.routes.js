@@ -5,7 +5,7 @@ module.exports = app => {
     var router = require("express").Router();
   
     // Create a new post
-    router.post("/", auth, post.create);
+    router.post("/",  post.create);
   
     // Retrieve all published posts
     router.get("/published", auth, post.findAllPublished);

@@ -58,7 +58,9 @@ export default {
               mySessionStorage = {
                 firstname: responseData.user.firstname,
                 lastname: responseData.user.lastname,
-                email: responseData.user.email
+                email: responseData.user.email,
+                userId: responseData.user.id,
+                token: responseData.token
               };
             } else {
               mySessionStorage = JSON.parse(mySessionStorage);
