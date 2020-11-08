@@ -27,7 +27,7 @@
           <span class="sr-only">(current)</span>
         </a>
         <a><router-link class="nav-link" to="/user">Mon profil</router-link></a>
-        <a><router-link class="nav-link" to="/">Déconnexion</router-link></a>
+        <a @click="disconnect"><router-link class="nav-link" to="/" >Déconnexion</router-link></a>
       </div>
     </div>
   </nav>
@@ -38,6 +38,12 @@
 <script>
 export default {
   name: "NavBar",
+
+  methods: {
+    disconnect: function() {
+      return sessionStorage.clear();
+    }
+  }
 };
 </script>
 

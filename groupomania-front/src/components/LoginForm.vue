@@ -25,9 +25,7 @@
           </router-link></small
         >
       </div>
-      <button type="submit" class="btn btn-primary">
-      Valider
-      </button>
+      <button type="submit" class="btn btn-primary">Valider</button>
     </form>
   </div>
 </template>
@@ -36,50 +34,58 @@
 export default {
   name: "LoginForm",
 
-  data: function(){
+  data: function () {
     return {
       email: "",
-      password: ""
-    }
+      password: "",
+    };
   },
 
   methods: {
-    login: function(e){
+    sentForm: async function () {
+      let response = await fetch("http://localhost:8080/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: this.email, password: this.password }),
+      });
+      let responseData = await response.json();
+      console.log(responseData);
+      let mySessionStorage = sessionStorage.getItem("margaux_oc");
+            if (!mySessionStorage) {
+              // Je crée la structure de ma session Storage
+              mySessionStorage = {
+                firstname: responseData.user.firstname,
+                lastname: responseData.user.lastname,
+                email: responseData.user.email
+              };
+            } else {
+              mySessionStorage = JSON.parse(mySessionStorage);
+            }
+            sessionStorage.setItem("margaux_oc",JSON.stringify(mySessionStorage));
+            this.$router.push({ path: "/home" }); // J'indique la page sur laquelle je veux faire suivre les info
+      return responseData;
+    },
+
+    login: function (e) {
       e.preventDefault();
 
-      if( this.email && this.password ){
-        const sentForm = async function (data) {
-          let response = await fetch('http://localhost:8080/api/user/login', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-          })
-          let responseData = response.json()
-          return responseData;
-        }
-        
-
-        sentForm({
-          email: this.email,
-          password: this.password
-        })
-        .then(this.$router.push({ path: "/home" }))
-        
-        // return this.$router.push({ path: "/home" })
+      if (this.email && this.password) {
+        this.sentForm()
+        .then((response) => {
+          if (response.error) {
+            window.alert(response.error);
+          } else {
+            this.$router.push({ path: "/home" });
+          }
+        });
+      } else {
+        window.alert("Tous les champs sont obligatoires !");
       }
-      else{
-        window.alert("Tous les champs sont obligatoires !")
-      }
-      
-
-    } 
-
-  } 
+    },
+  },
 };
-
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -2,6 +2,7 @@
   <div>
     <NavBar />
     <div class="user-page">
+      <h2>Bienvenue {{ firstname }} !</h2>
       <div>Publication</div>
       <div>Description</div>
       <div>Image</div>
@@ -19,6 +20,19 @@ export default {
   components: {
     NavBar,
   },
+
+  data: function(){
+    return {
+      firstname: ""
+    }
+  },
+  
+  mounted() {
+    const mySessionStorage = JSON.parse(sessionStorage.getItem('margaux_oc'))
+    if (mySessionStorage.firstname){
+      this.firstname = mySessionStorage.firstname
+    }
+  }
 };
 </script>
 

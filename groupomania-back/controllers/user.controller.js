@@ -36,18 +36,18 @@ exports.login = (req, res, next) => {
         })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: 'User not found !' });
+                return res.status(404).json({ error: "Cet utilisateur n'existe pas" });
             }
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
-                        return res.status(401).json({ error: 'Incorrect password !' });
+                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
                     return res.status(200).json({
                         user:  user,
                         token: jwt.sign(
                             { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.JWT_SECRET,
                             { expiresIn: '24h' }
                         )
                     });

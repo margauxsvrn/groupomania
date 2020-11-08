@@ -6,6 +6,9 @@ const helmet = require('helmet'); // Installation de Helmet qui configure de man
 const app = express();
 const db = require("./models");
 
+// J'APPEL MON FICHIER .ENV QUI CONTIENT LES ID DE CONNEXION A LA BDD
+require('dotenv').config()
+
 
 // UTILISATION DE HELMET
 app.use(helmet());

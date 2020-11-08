@@ -2,7 +2,7 @@
   <div>
     <Header />
     <h3 class="signup-title">Créer un compte</h3>
-    <br>
+    <br />
     <form class="login-form" @submit="signup">
       <div class="form-group">
         <label for="exampleInputName1">Nom</label>
@@ -40,7 +40,6 @@
           class="form-control"
           id="exampleInputPassword1"
         />
-        
       </div>
       <button type="submit" class="btn btn-primary">S'inscrire</button>
     </form>
@@ -48,56 +47,71 @@
 </template>
 
 <script>
-
 import Header from "../components/Header.vue";
 
 export default {
   name: "Signup",
   components: {
-    Header
+    Header,
   },
 
-  data: function(){
+  data: function () {
     return {
       firstname: "",
       lastname: "",
       email: "",
-      password: ""
-    }
+      password: "",
+    };
   },
 
   methods: {
-    signup: function(e){
-      e.preventDefault();
-
-      if( this.email && this.password && this.firstname && this.lastname ){
-        const sentForm = async function (data) {
-          let response = await fetch('http://localhost:8080/api/user/signup', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-          })
-          let responseData = response.json()
-          return responseData;
-        }
-
-        sentForm({
+    sentForm: async function () {
+      let response = await fetch("http://localhost:8080/api/user/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           firstname: this.firstname,
           lastname: this.lastname,
           email: this.email,
-          password: this.password
-        })
-        return this.$router.push({ path: "/home" })
-      }
-      else{
-        window.alert("Tous les champs sont obligatoires !")
-      }
+          password: this.password,
+        }),
+      });
+      let responseData = await response.json();
+      console.log(responseData);
+      return responseData;
+    },
 
-    }
+    signup: function (e) {
+      e.preventDefault();
 
-  }  
+      if (this.email && this.password && this.firstname && this.lastname) {
+        this.sentForm().then((response) => {
+          if (response.error) {
+            window.alert(response.error);
+          } else {
+            this.$router.push({ path: "/home" });
+            let mySessionStorage = sessionStorage.getItem("margaux_oc");
+            if (!mySessionStorage) {
+              // Je crée la structure de ma session Storage
+              mySessionStorage = {
+                firstname: this.firstname,
+                lastname: this.lastname,
+                email: this.email,
+              };
+            } else {
+              mySessionStorage = JSON.parse(mySessionStorage);
+            }
+            sessionStorage.setItem("margaux_oc",JSON.stringify(mySessionStorage));
+            this.$router.push({ path: "/home" }); // J'indique la page sur laquelle je veux faire suivre les info
+          }
+        });
+      } else {
+        window.alert("Tous les champs sont obligatoires !");
+      }
+    },
+  },
 };
 </script>
 
@@ -114,8 +128,6 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-
-
 
 .login-form {
   width: 100%;
