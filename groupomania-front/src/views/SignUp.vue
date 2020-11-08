@@ -98,7 +98,7 @@ export default {
               mySessionStorage = {
                 firstname: this.firstname,
                 lastname: this.lastname,
-                email: this.email,
+                email: this.email
               };
             } else {
               mySessionStorage = JSON.parse(mySessionStorage);

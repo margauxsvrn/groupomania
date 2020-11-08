@@ -1,11 +1,12 @@
 <template>
   <div class="allPostModule">
-    <div class="card w-75">
+    <div v-for="post in posts" :key="post.id" class="card w-75">
       <div class="card-body">
-        <h5 class="card-title">Nom de l'auteur</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Publié le</h6>
-        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <a href="#" class="btn btn-outline-info">Commenter</a>
+        <h5 class="card-title">{{ post.user.firstname }} {{ post.user.lastname }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Publié le {{ post.createdAt }}</h6>
+        <p class="card-text">{{ post.text_content }}</p>
+        <a class="btn btn-outline-info">Commenter</a>
+        <button type="button" class="btn btn-danger" @click="deletePost">Supprimer</button>
       </div>
     </div>
   </div>
@@ -18,35 +19,54 @@
 export default {
   name: "AllPosts",
 
-    data: function(){
-    return {
-      firstname: "",
-      text_content:"",
-      createdAt: ""
-    }
-  },
+    data: function() {
+      return {
+        firstname: "" ,
+        lastname: "" ,
+        text_content: "",
+        createdAt: "",
+        posts: []
+      }
+    },
+  
   
   mounted() {
     const mySessionStorage = JSON.parse(sessionStorage.getItem('margaux_oc'))
     if (mySessionStorage.firstname){
       this.firstname = mySessionStorage.firstname
     }
+    this.getAllPost()
   },
 
-  // methods: {
-    // getAllPost: function () {
-    //   fetch("http://localhost:8080/api/post/published").then(function (response){
-    //     response.json().then(function(posts){
-    //       for (const post of posts) {
 
-    //       }
-    //     })
-    //   })
-        
+  methods: {
+    getAllPost: function () {
+      fetch("http://localhost:8080/api/post/published").then((response) => {
+        response.json().then((posts) => {
+          this.posts = posts.map((post) => {
+            post.createdAt = this.formateDate(post.createdAt)
+            return post
+          })
+          console.log(this.posts)
+        })
+      })
+    },
+
+    // Je crée une méthode qui reformate la date et l'heure de l'élément "createdAt"
+    formateDate: function (dateToFormat) {
+      let output = dateToFormat.split(".")[0]
+      output = output.split("T")
+      let time = output[1]
+      let postDate = output[0].split("-").reverse().join("/")
+      output = postDate + " " + time 
+      return output; 
+    },
+
+    deletePost: function () {
       
-      
-  //   },
-  // }
+    }
+
+  }
 };
 </script>
 
@@ -54,15 +74,22 @@ export default {
 .allPostModule {
   margin-left: auto;
   margin-right: auto;
+  margin: 2%;
   margin-bottom: 5%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  width: auto;
+  
 
   .card {
-    background-color: #2c3e50;
+    margin: 2%;
+    background-color: #2c3e50ec;
     color: white;
-    text-align: justify;
+    text-align: left;
+
+    button {
+      margin-left: 10px;
+    }
 
   }
 

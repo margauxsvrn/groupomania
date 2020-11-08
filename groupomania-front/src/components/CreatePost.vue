@@ -27,18 +27,23 @@ export default {
     data: function(){
     return {
       firstname: "",
-      text_content:""
+      text_content:"",
+      userId: ""
     }
   },
+  
+  // Lorsque je me connecte je récupère le sessionStorage
   
   mounted() {
     const mySessionStorage = JSON.parse(sessionStorage.getItem('margaux_oc'))
     if (mySessionStorage.firstname){
-      this.firstname = mySessionStorage.firstname
+      this.firstname = mySessionStorage.firstname,
+      this.userId = mySessionStorage.userId
     }
   },
 
   methods: {
+    // Fonction qui lance la requête à l'API pour créer le post
     sentData: async function () {
       let response = await fetch("http://localhost:8080/api/post/", {
         method: "POST",
@@ -46,7 +51,8 @@ export default {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text_content: this.text_content
+          text_content: this.text_content,
+          userId: this.userId
         }),
       });
       let responseData = await response.json();
@@ -54,6 +60,7 @@ export default {
       return responseData;
     },
     
+    // Fonction appelé au clic sur le btn "Publier" qui appel la fonction sentData pour enregistrer le post dans la BDD
     submitPost: function (e) {
       e.preventDefault();
 
@@ -61,8 +68,10 @@ export default {
         this.sentData().then((response) => {
           if (response.error) {
             window.alert(response.error);
-          } else {
-            this.$router.push({ path: "/home" });
+          }
+          else {
+            this.text_content = ""
+            this.$router.go()
           }
         });
       } else {

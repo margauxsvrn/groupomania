@@ -1,5 +1,6 @@
 const db = require("../models");
 const Post = db.post;
+const User = db.user;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Post
@@ -14,7 +15,7 @@ exports.create = (req, res) => {
   
     // Create a Post
     const post = {
-      user_id: req.params.userId,
+      userId: req.body.userId,
       text_content: req.body.text_content
     };
   
@@ -83,7 +84,11 @@ exports.delete = (req, res) => {
 
 // Find all published Posts
 exports.findAllPublished = (req, res) => {
-    Post.findAll()
+  // J'indique que je veux récupérer les info que contient l'userId
+  User.hasMany(Post, {foreignKey: 'userId'}); 
+  Post.belongsTo(User, {foreignKey: 'userId'});
+
+    Post.findAll({include: User})
       .then(data => {
         res.send(data);
       })
