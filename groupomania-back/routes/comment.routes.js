@@ -5,7 +5,7 @@ module.exports = app => {
     var router = require("express").Router();
   
     // Create a new comment
-    router.post("/", auth, comment.create);
+    router.post("/", comment.create);
   
     // Retrieve all published comments
     router.get("/:postId", auth, comment.findAllPublished);

@@ -91,19 +91,8 @@ export default {
           if (response.error) {
             window.alert(response.error);
           } else {
-            this.$router.push({ path: "/home" });
-            let mySessionStorage = sessionStorage.getItem("margaux_oc");
-            if (!mySessionStorage) {
-              // Je crée la structure de ma session Storage
-              mySessionStorage = {
-                firstname: this.firstname,
-                lastname: this.lastname,
-                email: this.email
-              };
-            } else {
-              mySessionStorage = JSON.parse(mySessionStorage);
-            }
-            sessionStorage.setItem("margaux_oc",JSON.stringify(mySessionStorage));
+            console.log(response.userId)
+            this.initStorage(response.userId)
             this.$router.push({ path: "/home" }); // J'indique la page sur laquelle je veux faire suivre les info
           }
         });
@@ -111,6 +100,22 @@ export default {
         window.alert("Tous les champs sont obligatoires !");
       }
     },
+
+    initStorage: function(userId){
+       let mySessionStorage = sessionStorage.getItem("margaux_oc");
+            if (!mySessionStorage) {
+              // Je crée la structure de ma session Storage
+              mySessionStorage = {
+                firstname: this.firstname,
+                lastname: this.lastname,
+                email: this.email,
+                userId: userId
+              };
+            } else {
+              mySessionStorage = JSON.parse(mySessionStorage);
+            }
+            sessionStorage.setItem("margaux_oc",JSON.stringify(mySessionStorage));
+    }
   },
 };
 </script>
