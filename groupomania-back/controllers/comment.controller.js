@@ -1,5 +1,6 @@
 const db = require("../models");
 const Comment = db.comment;
+const User = db.user;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Comment
@@ -14,8 +15,8 @@ exports.create = (req, res) => {
   
     // Get comment content back
     const comment = {
-      userId: req.params.userId,
-      postId: req.params.postId,
+      userId: req.body.userId,
+      postId: req.body.postId,
       comment_content: req.body.comment_content
     };
   
@@ -23,28 +24,6 @@ exports.create = (req, res) => {
     Comment.create(comment)
       .then(data => {
         res.send(data);
-      })
-      .catch(error => res.status(500).json({ error }));
-  };
-
-
-// Update a Comment by the id in the request
-exports.update = (req, res) => {
-    const id = req.params.id;
-  
-    Comment.update(req.body, {
-      where: { id: id }
-    })
-      .then(num => {
-        if (num == 1) {
-          res.send({
-            message: "Comment was updated successfully."
-          });
-        } else {
-          res.send({
-            message: `Cannot update Comment with id=${id}. Maybe Comment was not found or req.body is empty!`
-          });
-        }
       })
       .catch(error => res.status(500).json({ error }));
   };
@@ -72,9 +51,56 @@ exports.delete = (req, res) => {
 
 // Find all published Comment
 exports.findAllPublished = (req, res) => {
-    Comment.findAll()
+  // J'indique que je veux récupérer les info que contient l'userId
+  User.hasMany(Comment, {foreignKey: 'userId'}); 
+  Comment.belongsTo(User, {foreignKey: 'userId'});
+console.log(req.params.postId)
+    Comment.findAll({
+      where: { postId: req.params.postId },
+      include: User
+    })
       .then(data => {
         res.send(data);
       })
       .catch(error => res.status(500).json({ error }));
   };
+
+  // Update a Comment by the id in the request
+exports.report = (req, res) => {
+  const id = req.params.id;
+  let reportAction ; 
+  if(req.params.action == 1){
+    reportAction = true
+  } else {
+    reportAction = false
+  }
+
+  Comment.update(
+    { isReported: reportAction },
+    { where: { id: id } }
+  )
+    .then(num => {
+      if (num == 1) {
+        return res.status(201).json({ success: "Commentaire signalé !" });
+      } else {
+        return res.status(404).json({ error: "Impossible de signaler ce commentaire" });
+      }
+    })
+    .catch(error => res.status(500).json({ error }));
+};
+
+// Find all reported post
+exports.findAllReported = (req, res) => {
+  // User.hasMany(Comment, {foreignKey: 'userId'}); 
+  // Comment.belongsTo(User, {foreignKey: 'userId'});
+
+  // Comment.findAll(
+  //   // { where: { isReported: true } }
+  //   )
+
+  //   .then(data => {
+  //     res.send(data);
+  //   })
+  //   .catch(error => res.status(500).json({ error }));
+};
+

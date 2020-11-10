@@ -10,11 +10,11 @@ module.exports = app => {
     // Retrieve all published posts
     router.get("/published", post.findAllPublished);
   
-    // Retrieve a single post with id
-    router.get("/:id", auth, post.findOne);
+    // Retrieve all reported post
+    router.get("/reported", post.findAllReported);
   
-    // Update a post with id
-    router.put("/:id", auth, post.update);
+    // Report comment
+    router.put("/report/:id/:action", post.report);
   
     // Delete a post with id
     router.delete("/:id", post.delete);

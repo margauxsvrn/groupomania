@@ -50,7 +50,7 @@
 import Header from "../components/Header.vue";
 
 export default {
-  name: "Signup",
+  name: "SignUp",
   components: {
     Header,
   },
@@ -109,7 +109,8 @@ export default {
                 firstname: this.firstname,
                 lastname: this.lastname,
                 email: this.email,
-                userId: userId
+                userId: userId,
+                isAdmin: 0
               };
             } else {
               mySessionStorage = JSON.parse(mySessionStorage);

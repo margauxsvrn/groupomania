@@ -28,38 +28,44 @@ exports.create = (req, res) => {
   };
 
 
-// Find a single Post with an id
-exports.findOne = (req, res) => {
-    const id = req.params.id;
+// Find all reported post
+exports.findAllReported = (req, res) => {
+  User.hasMany(Post, {foreignKey: 'userId'}); 
+  Post.belongsTo(User, {foreignKey: 'userId'});
   
-    Post.findByPk(id)
-      .then(data => {
-        res.send(data);
-      })
-      .catch(error => res.status(500).json({ error }));
-  };
+  Post.findAll(
+    { where: { isReported: true } }
+    )
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => res.status(500).json({ error }));
+};
 
 // Update a Post by the id in the request
-exports.update = (req, res) => {
-    const id = req.params.id;
-  
-    Post.update(req.body, {
-      where: { id: id }
-    })
-      .then(num => {
-        if (num == 1) {
-          res.send({
-            message: "Post was updated successfully."
-          });
-        } else {
-          res.send({
-            message: `Cannot update Post with id=${id}. Maybe Post was not found or req.body is empty!`
-          });
-        }
-      })
-      .catch(error => res.status(500).json({ error }));
+exports.report = (req, res) => {
+  const id = req.params.id;
+  let reportAction ; 
+  if(req.params.action == 1){
+    reportAction = true
+  } else {
+    reportAction = false
+  }
 
-  };
+  Post.update(
+    { isReported: reportAction },
+    { where: { id: id } }
+  )
+    .then(num => {
+      if (num == 1) {
+        return res.status(201).json({ success: "Post signalé !" })
+      } else {
+        return res.status(404).json({ error: "Impossible de signaler ce post" })
+      }
+    })
+    .catch(error => res.status(500).json({ error }));
+
+};
 
 // Delete a Post with the specified id in the request
 exports.delete = (req, res) => {

@@ -8,13 +8,16 @@ module.exports = app => {
     router.post("/", comment.create);
   
     // Retrieve all published comments
-    router.get("/:postId", auth, comment.findAllPublished);
+    router.get("/:postId", comment.findAllPublished);
   
-    // Update a comment with id
-    router.put("/:id", auth, comment.update);
+    // Retrieve all reported comment
+    router.get("/reported", comment.findAllReported);
   
     // Delete a comment with id
-    router.delete("/:id", auth, comment.delete);
+    router.delete("/:id", comment.delete);
+
+    // Report comment
+    router.put("/report/:id/:action", comment.report);
   
    
     app.use('/api/comment', router);

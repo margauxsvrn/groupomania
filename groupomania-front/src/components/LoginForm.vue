@@ -60,13 +60,13 @@ export default {
                 lastname: responseData.user.lastname,
                 email: responseData.user.email,
                 userId: responseData.user.id,
-                token: responseData.token
+                isAdmin: responseData.user.isAdmin
               };
             } else {
               mySessionStorage = JSON.parse(mySessionStorage);
             }
             sessionStorage.setItem("margaux_oc",JSON.stringify(mySessionStorage));
-            this.$router.push({ path: "/home" }); // J'indique la page sur laquelle je veux faire suivre les info
+             
       return responseData;
     },
 
@@ -79,7 +79,7 @@ export default {
           if (response.error) {
             window.alert(response.error);
           } else {
-            this.$router.push({ path: "/home" });
+            this.$router.push({ path: "/home" }); // J'indique la page sur laquelle je veux faire suivre les info
           }
         });
       } else {

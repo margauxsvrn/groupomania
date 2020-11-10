@@ -28,7 +28,8 @@ export default {
     return {
       firstname: "",
       text_content:"",
-      userId: ""
+      userId: "",
+      postId: ""
     }
   },
   
@@ -52,7 +53,7 @@ export default {
         },
         body: JSON.stringify({
           text_content: this.text_content,
-          userId: this.userId
+          userId: this.userId,
         }),
       });
       let responseData = await response.json();
@@ -70,6 +71,7 @@ export default {
             window.alert(response.error);
           }
           else {
+            this.initStorage(response.postId)
             this.text_content = ""
             this.$router.go()
           }
@@ -78,6 +80,17 @@ export default {
         window.alert("Le post doit contenir du texte !");
       }
     },
+
+    initStorage: function(postId){
+       let mySessionStorage = sessionStorage.getItem("margaux_oc");
+            if (!mySessionStorage) {
+              // Je crée la structure de ma session Storage
+              mySessionStorage.postId = postId
+            } else {
+              mySessionStorage = JSON.parse(mySessionStorage);
+            }
+            sessionStorage.setItem("margaux_oc",JSON.stringify(mySessionStorage));
+    }
 
   }
 };

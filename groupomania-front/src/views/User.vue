@@ -8,19 +8,23 @@
           <div>
             <i class="far fa-user"></i>
             <br>
-            {{ lastname }} {{ firstname }}
+            {{ user.lastname }} {{ user.firstname }}
           </div>
           <br>
           <div>
             <i class="fas fa-at"></i>
             <br>
-            {{ email }}
+            {{ user.email }}
           </div>
           <br>
           <br>
-          <button type="button" class="btn btn-primary"><i class="fas fa-user-edit"></i> Modifier</button>
+
+          <button type="button" class="btn btn-info"><i class="fas fa-user-edit"></i> Modifier</button>
+
+          <button @click="deleteUser()" id="btn_delete_profil" type="button" class="btn btn-outline-danger">Supprimer</button>
         </div>
     </div>
+    
   </div>
 </template>
 
@@ -35,19 +39,58 @@ export default {
 
   data: function(){
     return {
-      firstname: "",
-      lastname: "",
-      email: ""
+      userId: "",
+      user: {
+        firstname: "",
+        lastname: "",
+        email: ""
+      }
     }
   },
   
   mounted() {
-    const mySessionStorage = JSON.parse(sessionStorage.getItem('margaux_oc'))
-    if (mySessionStorage.firstname, mySessionStorage.lastname, mySessionStorage.email){
-      this.firstname = mySessionStorage.firstname,
-      this.lastname = mySessionStorage.lastname,
-      this.email = mySessionStorage.email
-    }
+    this.userId = JSON.parse(sessionStorage.getItem("margaux_oc")).userId
+    this.getUser();
+    
+  },
+
+  methods: {
+
+    // Fonction qui récupère le user
+    getUser: async function() {
+      fetch(`http://localhost:8080/api/user/${this.userId}`).then((response) => {
+        response.json().then((user) => {
+          this.user = user
+          console.log(user)
+        })
+      })
+    },
+
+    // Fonction qui modifie un user
+    updateUser: async function () {
+       await fetch(`http://localhost:8080/api/user/${this.userId}`, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    },
+
+    // Fonction qui supprime un user
+    deleteUser: async function () {
+       await fetch(`http://localhost:8080/api/user/${this.userId}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      
+      sessionStorage.clear();
+      window.alert("Votre compte a bien été supprimé")
+      this.$router.push({ path: "/" });
+
+    },
+
   }
 };
 </script>
@@ -77,6 +120,10 @@ export default {
       margin-left: auto;
       width: 50%;
     }
+  }
+
+  #btn_delete_profil {
+    margin-left: 4% ;
   }
 }
 
