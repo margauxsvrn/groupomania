@@ -203,7 +203,7 @@ export default {
     // Requête qui récupère tous les commentaires publiés
     getAllComment: async function (postId) {
       const response = await fetch(
-        `http://localhost:8080/api/comment/${postId}`
+        `http://localhost:8080/api/comment/published/${postId}`
       );
       const comments = await response.json();
 

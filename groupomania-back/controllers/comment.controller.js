@@ -91,16 +91,16 @@ exports.report = (req, res) => {
 
 // Find all reported post
 exports.findAllReported = (req, res) => {
-  // User.hasMany(Comment, {foreignKey: 'userId'}); 
-  // Comment.belongsTo(User, {foreignKey: 'userId'});
+  User.hasMany(Comment, {foreignKey: 'userId'}); 
+  Comment.belongsTo(User, {foreignKey: 'userId'});
 
-  // Comment.findAll(
-  //   // { where: { isReported: true } }
-  //   )
+  Comment.findAll(
+    // { where: { isReported: true } }
+    )
 
-  //   .then(data => {
-  //     res.send(data);
-  //   })
-  //   .catch(error => res.status(500).json({ error }));
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => res.status(500).json({ error }));
 };
 

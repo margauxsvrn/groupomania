@@ -8,7 +8,7 @@ module.exports = app => {
     router.post("/", comment.create);
   
     // Retrieve all published comments
-    router.get("/:postId", comment.findAllPublished);
+    router.get("/published/:postId", comment.findAllPublished);
   
     // Retrieve all reported comment
     router.get("/reported", comment.findAllReported);
