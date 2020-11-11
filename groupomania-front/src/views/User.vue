@@ -97,6 +97,10 @@ export default {
       const headers = authHeader();
       headers["Content-Type"] = "application/json" ;
 
+      if ( this.user.firstname.trim().length < 1 || this.user.lastname.trim().length < 1 ){
+          window.alert("Les champs ne doivent pas être vide !")
+          return
+      }
       const response = await fetch(`http://localhost:8080/api/user/${this.userId}`, {
         method: 'PUT',
         headers: headers,

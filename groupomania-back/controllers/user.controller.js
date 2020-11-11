@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 
 // Create and Save a new User
 exports.signup = (req, res) => {
+  if (!req.body.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/i)) {
+    return res.status(401).json({error : "bad_formate_password"})
+  }
     bcrypt.hash(req.body.password, 10, (err, pass) => {
         let newUser = User.create({
                 email: req.body.email,
@@ -83,7 +86,7 @@ exports.update = (req, res) => {
     const id = req.params.id;
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
-  console.log("################" , firstname, lastname);
+  
     User.update( 
       { firstname, lastname },
       { where: { id: id } })

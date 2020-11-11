@@ -85,7 +85,16 @@ export default {
       let responseData = await response.json();
       console.log(responseData);
       
-            this.$router.push({ path: "/" }); // J'indique la page sur laquelle je veux faire suivre les info
+      if (responseData.error) {
+        if (responseData.error === "bad_formate_password"){
+          window.alert("Votre mot de passe doit contenir minimum 8 charactères, un caractère minuscule et majuscule et un chiffre.")
+        } else {
+           window.alert("Une erreur est survenue.")
+        }
+        return
+      }
+
+      this.$router.push({ path: "/" }); // J'indique la page sur laquelle je veux faire suivre les info
           
       } else {
         window.alert("Tous les champs sont obligatoires !");

@@ -46,7 +46,7 @@ export default {
     login: async function (e) {
       e.preventDefault();
 
-      if (this.email && this.password) {
+      if (this.email.trim().length > 0 && this.password.trim().length > 0) {
         let response = await fetch("http://localhost:8080/api/user/login", {
         method: "POST",
         headers: {
