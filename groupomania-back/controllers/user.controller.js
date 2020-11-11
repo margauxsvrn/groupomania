@@ -81,8 +81,11 @@ exports.findOne = (req, res) => {
 // Update a User by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
-  
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+  console.log("################" , firstname, lastname);
     User.update( 
+      { firstname, lastname },
       { where: { id: id } })
       .then(num => {
         if (num == 1) {

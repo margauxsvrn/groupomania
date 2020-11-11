@@ -36,7 +36,7 @@
         <button
           v-if="post.userId == userId"
           type="button"
-          class="btn btn-danger"
+          class="btn btn-danger btn_delete_post"
           @click="deletePost(post.id, index)">
           Supprimer
         </button>
@@ -313,7 +313,7 @@ export default {
 
   .comment_message {
     margin-top: 3%;
-
+    
     h5 {
       font-size: 1rem;
       font-weight: bold;
@@ -331,11 +331,15 @@ export default {
     font-size: 0.8em;
     width: 185px;
   }
+
+  
 }
 
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
-
+  .btn_delete_post {
+    margin: 5%;
+  }
 
 }
 </style>

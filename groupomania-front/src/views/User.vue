@@ -8,18 +8,22 @@
           <div>
             <i class="far fa-user"></i>
             <br>
-            {{ user.lastname }} {{ user.firstname }}
+            <label v-if="!update" > {{ user.lastname }} </label>
+            <input v-else v-model="user.lastname" type="text" placeholder="Nom"> 
+            <label v-if="!update" > {{ user.firstname }} </label>
+            <input v-else v-model="user.firstname" type="text" placeholder="Prénom">
           </div>
           <br>
           <div>
             <i class="fas fa-at"></i>
             <br>
-            {{ user.email }}
+            <label > {{ user.email }} </label>
           </div>
           <br>
           <br>
 
-          <button type="button" class="btn btn-info"><i class="fas fa-user-edit"></i> Modifier</button>
+          <button v-if="!update" @click="displayUpdateFields" type="button" class="btn btn-info"><i class="fas fa-user-edit"></i> Modifier</button>
+          <button v-else @click="submitModifications" type="button" class="btn btn-info"><i class="fas fa-user-edit"></i> Valider les modifications </button>
 
           <button @click="deleteUser()" id="btn_delete_profil" type="button" class="btn btn-outline-danger">Supprimer</button>
         </div>
@@ -45,7 +49,8 @@ export default {
         firstname: "",
         lastname: "",
         email: ""
-      }
+      },
+      update: false
     }
   },
   
@@ -67,16 +72,8 @@ export default {
       })
     },
 
-    // Fonction qui modifie un user
-    updateUser: async function () {
-      const headers = authHeader();
-      headers["Content-Type"] = "application/json" ;
-
-       await fetch(`http://localhost:8080/api/user/${this.userId}`, {
-        method: 'PUT',
-        headers: headers,
-      })
-    },
+    
+    
 
     // Fonction qui supprime un user
     deleteUser: async function () {
@@ -90,6 +87,34 @@ export default {
       this.$router.push({ path: "/" });
 
     },
+
+    displayUpdateFields : function () {
+      this.update = true
+    },
+
+    // Fonction qui modifie un user
+    submitModifications : async function () {
+      const headers = authHeader();
+      headers["Content-Type"] = "application/json" ;
+
+      const response = await fetch(`http://localhost:8080/api/user/${this.userId}`, {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify({
+          firstname : this.user.firstname,
+          lastname : this.user.lastname
+        }),
+      })
+      const responseData = await response.json()
+      if (responseData.error){
+        window.alert("Un problème est survenu !")
+        return ;
+      }
+      this.update = false
+
+    }
+
+    
 
   }
 };
@@ -125,6 +150,15 @@ export default {
   #btn_delete_profil {
     margin-left: 4% ;
   }
+
+  label {
+    margin: 3px;
+  }
+
+  input {
+   text-align: center;
+  }
+
 }
 
 @media only screen and (max-width: 768px) {
