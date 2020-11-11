@@ -13,6 +13,7 @@ import NavBar from "../components/NavBar";
 import CreatePost from "../components/CreatePost";
 import AllPosts from "../components/AllPosts";
 
+
 export default {
   name: "Home",
   components: {

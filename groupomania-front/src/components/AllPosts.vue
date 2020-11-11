@@ -106,6 +106,8 @@
 
 
 <script>
+import authHeader from '../services/auth-header';
+
 export default {
   name: "AllPosts",
 
@@ -131,7 +133,7 @@ export default {
   methods: {
     // Requête qui récupère tous les posts publiés
     getAllPost: function () {
-      fetch("http://localhost:8080/api/post/published").then((response) => {
+      fetch("http://localhost:8080/api/post/published", { headers: authHeader() }).then((response) => {
         response.json().then((posts) => {
           this.posts = posts.map((post) => {
             post.createdAt = this.formateDate(post.createdAt);
@@ -159,9 +161,7 @@ export default {
     deletePost: async function (postId, index) {
       let response = await fetch(`http://localhost:8080/api/post/${postId}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeader(),
       });
       let responseData = await response.json();
       console.log(responseData);
@@ -180,11 +180,13 @@ export default {
     // Fonction qui ajoute un commentaire
     sendComment: async function (postId) {
       if (this.comment_content) {
+        const headers = authHeader();
+        headers["Content-Type"] = "application/json" ;
+
         let response = await fetch("http://localhost:8080/api/comment/", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: headers,
+        
           body: JSON.stringify({
             comment_content: this.comment_content,
             userId: this.userId,
@@ -203,7 +205,7 @@ export default {
     // Requête qui récupère tous les commentaires publiés
     getAllComment: async function (postId) {
       const response = await fetch(
-        `http://localhost:8080/api/comment/published/${postId}`
+        `http://localhost:8080/api/comment/published/${postId}`, { headers: authHeader() }
       );
       const comments = await response.json();
 
@@ -219,9 +221,7 @@ export default {
         `http://localhost:8080/api/comment/${commentId}`,
         {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: authHeader(),
         }
       );
       let responseData = await response.json();
@@ -237,9 +237,7 @@ export default {
           `http://localhost:8080/api/post/report/${id}/1`,
           {
             method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: authHeader(),
           }
         );
         const responseData = await response.json();
@@ -258,9 +256,7 @@ export default {
           `http://localhost:8080/api/comment/report/${id}/1`,
           {
             method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: authHeader(),
           }
         );
         const responseData = await response.json();

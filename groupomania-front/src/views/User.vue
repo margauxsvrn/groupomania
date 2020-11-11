@@ -30,6 +30,7 @@
 
 <script>
 import NavBar from "../components/NavBar";
+import authHeader from '../services/auth-header';
 
 export default {
   name: "User",
@@ -58,7 +59,7 @@ export default {
 
     // Fonction qui récupère le user
     getUser: async function() {
-      fetch(`http://localhost:8080/api/user/${this.userId}`).then((response) => {
+      fetch(`http://localhost:8080/api/user/${this.userId}`, { headers: authHeader() }).then((response) => {
         response.json().then((user) => {
           this.user = user
           console.log(user)
@@ -68,11 +69,12 @@ export default {
 
     // Fonction qui modifie un user
     updateUser: async function () {
+      const headers = authHeader();
+      headers["Content-Type"] = "application/json" ;
+
        await fetch(`http://localhost:8080/api/user/${this.userId}`, {
         method: 'PUT',
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
       })
     },
 
@@ -80,9 +82,7 @@ export default {
     deleteUser: async function () {
        await fetch(`http://localhost:8080/api/user/${this.userId}`, {
         method: 'DELETE',
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeader(),
       })
       
       sessionStorage.clear();

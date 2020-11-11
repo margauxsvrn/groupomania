@@ -33,9 +33,10 @@ exports.findAllReported = (req, res) => {
   User.hasMany(Post, {foreignKey: 'userId'}); 
   Post.belongsTo(User, {foreignKey: 'userId'});
   
-  Post.findAll(
-    { where: { isReported: true } }
-    )
+  Post.findAll({
+    where: { isReported: true },
+      include: User
+  })
     .then(data => {
       res.send(data);
     })

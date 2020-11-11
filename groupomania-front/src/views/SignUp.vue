@@ -65,8 +65,12 @@ export default {
   },
 
   methods: {
-    sentForm: async function () {
-      let response = await fetch("http://localhost:8080/api/user/signup", {
+    
+    signup: async function (e) {
+      e.preventDefault();
+
+      if (this.email && this.password && this.firstname && this.lastname) {
+          let response = await fetch("http://localhost:8080/api/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,43 +84,13 @@ export default {
       });
       let responseData = await response.json();
       console.log(responseData);
-      return responseData;
-    },
-
-    signup: function (e) {
-      e.preventDefault();
-
-      if (this.email && this.password && this.firstname && this.lastname) {
-        this.sentForm().then((response) => {
-          if (response.error) {
-            window.alert(response.error);
-          } else {
-            console.log(response.userId)
-            this.initStorage(response.userId)
-            this.$router.push({ path: "/home" }); // J'indique la page sur laquelle je veux faire suivre les info
-          }
-        });
+      
+            this.$router.push({ path: "/" }); // J'indique la page sur laquelle je veux faire suivre les info
+          
       } else {
         window.alert("Tous les champs sont obligatoires !");
       }
     },
-
-    initStorage: function(userId){
-       let mySessionStorage = sessionStorage.getItem("margaux_oc");
-            if (!mySessionStorage) {
-              // Je crée la structure de ma session Storage
-              mySessionStorage = {
-                firstname: this.firstname,
-                lastname: this.lastname,
-                email: this.email,
-                userId: userId,
-                isAdmin: 0
-              };
-            } else {
-              mySessionStorage = JSON.parse(mySessionStorage);
-            }
-            sessionStorage.setItem("margaux_oc",JSON.stringify(mySessionStorage));
-    }
   },
 };
 </script>

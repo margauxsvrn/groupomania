@@ -48,13 +48,13 @@ export default {
 
   mounted() {
     const mySessionStorage = JSON.parse(sessionStorage.getItem('margaux_oc'))
-    this.isAdmin = mySessionStorage.isAdmin
+    this.isAdmin = mySessionStorage && mySessionStorage.isAdmin
     
   },
 
   methods: {
     disconnect: function() {
-      return sessionStorage.clear();
+      sessionStorage.clear();
     },
 
   }
@@ -79,6 +79,10 @@ div nav {
   div .logo-groupomania-navBar {
     width: 60%;
     margin-right: 0;
+  }
+
+  nav{
+    width: 100%;
   }
 }
 </style>

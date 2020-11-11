@@ -21,6 +21,8 @@
 
 
 <script>
+import authHeader from '../services/auth-header';
+
 export default {
   name: "CreatePost",
 
@@ -37,20 +39,20 @@ export default {
   
   mounted() {
     const mySessionStorage = JSON.parse(sessionStorage.getItem('margaux_oc'))
-    if (mySessionStorage.firstname){
       this.firstname = mySessionStorage.firstname,
       this.userId = mySessionStorage.userId
-    }
+    
   },
 
   methods: {
     // Fonction qui lance la requête à l'API pour créer le post
     sentData: async function () {
+      const headers = authHeader();
+      headers["Content-Type"] = "application/json" ;
+
       let response = await fetch("http://localhost:8080/api/post/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
         body: JSON.stringify({
           text_content: this.text_content,
           userId: this.userId,
@@ -62,7 +64,7 @@ export default {
     },
     
     // Fonction appelé au clic sur le btn "Publier" qui appel la fonction sentData pour enregistrer le post dans la BDD
-    submitPost: function (e) {
+    submitPost: async function (e) {
       e.preventDefault();
 
       if (this.text_content) {

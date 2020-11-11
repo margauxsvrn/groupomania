@@ -94,10 +94,10 @@ exports.findAllReported = (req, res) => {
   User.hasMany(Comment, {foreignKey: 'userId'}); 
   Comment.belongsTo(User, {foreignKey: 'userId'});
 
-  Comment.findAll(
-    // { where: { isReported: true } }
-    )
-
+  Comment.findAll({
+    where: { isReported: true },
+      include: User
+  })
     .then(data => {
       res.send(data);
     })
