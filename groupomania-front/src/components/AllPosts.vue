@@ -77,7 +77,7 @@
             class="btn btn-warning btn-sm">
             Signaler
           </button>
-          <div v-else class="alert alert-warning btn_report" role="alert">
+          <div v-else class="alert alert-warning btn_report_com" role="alert">
             Commentaire signalé !
           </div>
         </div>
@@ -330,8 +330,15 @@ export default {
   .btn_report {
     font-size: 0.8em;
     width: 185px;
+    position: absolute;
+    right: 7px;
+    top: 7px;
   }
 
+  .btn_report_com {
+    font-size: 0.8em;
+    width: 185px;
+  }
   
 }
 

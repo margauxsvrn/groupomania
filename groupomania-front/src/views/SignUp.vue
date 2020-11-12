@@ -40,6 +40,10 @@
           class="form-control"
           id="exampleInputPassword1"
         />
+        <small id="emailHelp" class="form-text text-muted">
+            Doit contenir au minimum 8 caractères, un chiffre et une Majuscule.
+        </small
+        >
       </div>
       <button type="submit" class="btn btn-primary">S'inscrire</button>
     </form>

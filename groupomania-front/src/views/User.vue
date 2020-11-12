@@ -23,7 +23,7 @@
           <br>
 
           <button v-if="!update" @click="displayUpdateFields" type="button" class="btn btn-info"><i class="fas fa-user-edit"></i> Modifier</button>
-          <button v-else @click="submitModifications" type="button" class="btn btn-info"><i class="fas fa-user-edit"></i> Valider les modifications </button>
+          <button v-else @click="submitModifications" type="button" class="btn btn-info"><i class="fas fa-check-circle"></i> Valider les modifications </button>
 
           <button @click="deleteUser()" id="btn_delete_profil" type="button" class="btn btn-outline-danger">Supprimer</button>
         </div>
